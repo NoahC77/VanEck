@@ -11,44 +11,68 @@ int main ( int argc, char *argv[] );
 int searchSeq ( vector<int> seq, int val , int argc, char *argv[] );
 int searchFindings ( vector<int> finds );
 
-bool valAppear ( vector<int> unique, int val );
+bool valAppear ( vector<int> unique, int val, int arc, char *argv[] );
+
+//TODO make unique array sorted in ascending order so i can concurrent binary search
 
 int main ( int argc, char *argv[] ){
 	
-	int n, length;
+	int n, length = 20, endVal, nextElement, ierr = 0, id;
 	vector<int> sequence;
+	vector<int> unique;
 
 	//cout << "Enter desired length of Van Eck sequence." << endl;
 	//cin >> length;	
 	
 	//Just testing we want it to get 6.	
+	ierr = MPI_Init ( &argc, &argv );
+
+	ierr = MPI_Comm_rank ( MPI_COMM_WORLD, &id );	
+
 	sequence.push_back(0);
-	sequence.push_back(0);
-  //      sequence.push_back(1);
-//	sequence.push_back(0);
-//	sequence.push_back(2);
-//	sequence.push_back(0);
-//	sequence.push_back(2);
-//	sequence.push_back(2);
-//	sequence.push_back(1);
+	unique.push_back(-1);
+
+	for(int z = 1; z < length; z++){	
+		
+		if ( id == 0 ){	
+		cout << "sequence: ";
+		for(int c = 0; c < sequence.size(); c++){
+			cout << sequence.at(c) << ", ";	
+		}
+		}
+
+		endVal = sequence.at(sequence.size() - 1);
+		
+		if( !valAppear( unique, endVal, argc, argv ) ){
+			unique.push_back(endVal);
+			sequence.push_back(0);
+		}else{
+			sequence.push_back(searchSeq(sequence, endVal, argc, argv ));	
+		}
+	}		
 	
-	cout << "sequence: ";
-	for(int c = 0; c < sequence.size(); c++){
-		cout << sequence.at(c) << ", ";	
+	MPI_Finalize ( );
+	return 0;
+}
+
+bool valAppear ( vector<int> unique, int val, int arc, char *argv[] ){
+	
+	bool found = false;
+		
+	for( int c = 0; c < unique.size() && !found; c++){	
+			
+		if ( unique.at(c) == val )
+			found = true;
 	}
 
-	cout << endl << "searchSeq output: " << searchSeq ( sequence, 0, argc, argv ) << endl;
-	
-	return 0;
+	return found;
 }
 
 int searchFindings ( vector<int> finds ){
 	
-	cout << "Entered searchFindigns!" << endl;
 	int closestMatch = 0;
 	bool found = false;
 
-	cout << "finds.size() = " << finds.size() << " needs to be less than 0" << endl;
 	
 	for( int c = 0; c < finds.size(); c++){
 		cout << "[" <<  finds.at(c) << "]"; 
@@ -67,7 +91,7 @@ int searchFindings ( vector<int> finds ){
 			closestMatch = finds.at(c);
 	}
 	
-	cout << "closest math = " << closestMatch << endl;	
+	cout << "closest match = " << closestMatch << endl;	
 	
 	return closestMatch;
 }
@@ -75,16 +99,13 @@ int searchFindings ( vector<int> finds ){
 // if pos = -2 then the tasks couldn't check another index
 int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 
-	cout << "searchSeq started..." << endl;
 
 	bool found = false;	
-	int ierr, n, id;
+	int ierr = 0, n, id;//TODO FIX THIS IEERR CODE TO ACTUALLY GET ERRORS
 	int controller, factor = 0, pos = -1, searchVal = val, checkIndex;
 
-	ierr = MPI_Init ( &argc, &argv );
 
 	MPI_Comm_size ( MPI_COMM_WORLD, &n );
-	cout << "Comm_size = " << n << endl;
 	
 	if ( ierr != 0 ){
 		cout << endl;
@@ -95,7 +116,6 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 
 	ierr = MPI_Comm_rank ( MPI_COMM_WORLD, &id );	
 
-	cout << "Entering the unfound looking loop..." << endl;
 	while ( !found ){
 
 		checkIndex = (seq.size() - ( id + ( factor * n ) + 2 ));
@@ -106,7 +126,7 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 			
 			// We subtract 2 from the index so we don't check the last element in the sequence
 			if ( seq.at(checkIndex) == searchVal )
-				pos = checkIndex;
+				pos = seq.size() - 1 - checkIndex;
 			else 
 				pos = -1;
 		}else
@@ -115,7 +135,6 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 
 		MPI_Reduce ( &pos, &controller, 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD );
 
-		cout << "Task[" << id << "] controller = " << controller << endl;
 	
 		if ( id == 0 && controller > -1 )
 			found = true;
@@ -142,11 +161,9 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 
 	MPI_Comm_size ( MPI_COMM_WORLD, &n );
 
-	cout << "MPI_Comm_size = " << n << endl;
 
 	findings.resize ( n );
 
-	cout << "Task[" << id << "] resized findings to " << n << endl;
 
 	MPI_Gather( &pos, 1, MPI_INT, findings.data(), 1, MPI_INT, 0, MPI_COMM_WORLD );
 
@@ -154,17 +171,13 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 	int foundIndex = -1;
 	
 	if ( id == 0 ){
-		cout << "Task[" << id << "] calling searchFindings" << endl;
 		foundIndex = searchFindings ( findings );
-		cout << "Task[" << id << "] finished searchFindings" << endl;
 	}
 	
 	cout << "Bcasting final found index for return" << endl;
 	MPI_Bcast ( &foundIndex, 1, MPI_INT, 0, MPI_COMM_WORLD );	
 
-	cout << "Task[" << id << "] foundIndex = " << foundIndex << endl;
 	
-	MPI_Finalize ( );
 
 	return foundIndex;
 		
