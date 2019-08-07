@@ -19,15 +19,10 @@ bool valAppear ( vector<int> unique, int val, int arc, char *argv[] );
 int main ( int argc, char *argv[] ){
 	
 	int n, length = atoi(argv[1]), endVal, nextElement, ierr = 0, id;
+	double lastNumSearchTime = 0, uniqueSearchTime = 0, timeHolder;
 	vector<int> sequence;
 	vector<int> unique;
-		
-	cout << "length = " << length << endl;
-	cout << "number of arguments = " << argc << endl;
-	//cout << "Enter desired length of Van Eck sequence." << endl;
-	//cin >> length;	
-	
-	//Just testing we want it to get 6.	
+			
 	ierr = MPI_Init ( &argc, &argv );
 
 	ierr = MPI_Comm_rank ( MPI_COMM_WORLD, &id );	
@@ -38,17 +33,43 @@ int main ( int argc, char *argv[] ){
 	for(int z = 1; z < length; z++){	
 		
 		endVal = sequence.at(sequence.size() - 1);
+
+		if ( id == 0 )
+			timeHolder = MPI_Wtime();
 		
 		if( !valAppear( unique, endVal, argc, argv ) ){
 			unique.push_back(endVal);
 			sequence.push_back(0);
+
+			if ( id == 0 ){
+				timeHolder = MPI_Wtime() - timeHolder;
+				uniqueSearchTime += timeHolder;
+			}
+
 		}else{
+
+			if ( id == 0){
+				timeHolder = MPI_Wtime() - timeHolder;
+				uniqueSearchTime += timeHolder;
+				timeHolder = MPI_Wtime();
+			}
 			sequence.push_back(searchSeq(sequence, endVal, argc, argv ));	
+
+			if ( id == 0 ){
+				timeHolder = MPI_Wtime() - timeHolder;
+				lastNumSearchTime += timeHolder;
+			}	
 		}
 	}		
 			
 	MPI_Finalize ( );
-
+	
+	if ( id == 0 ){
+		
+		cout << endl;
+		cout << "Total Last Num Search Time: " << lastNumSearchTime << endl;
+		cout << "Total Unique Num Search Time: " << uniqueSearchTime << endl;
+	}
 	
 	if ( id == 0 ){	
 
