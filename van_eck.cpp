@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <mpi.h>
+#include <stdlib.h>
 #include <cstdlib>
 
 using namespace std;
@@ -17,10 +18,12 @@ bool valAppear ( vector<int> unique, int val, int arc, char *argv[] );
 
 int main ( int argc, char *argv[] ){
 	
-	int n, length = 20, endVal, nextElement, ierr = 0, id;
+	int n, length = atoi(argv[1]), endVal, nextElement, ierr = 0, id;
 	vector<int> sequence;
 	vector<int> unique;
-
+		
+	cout << "length = " << length << endl;
+	cout << "number of arguments = " << argc << endl;
 	//cout << "Enter desired length of Van Eck sequence." << endl;
 	//cin >> length;	
 	
@@ -34,13 +37,6 @@ int main ( int argc, char *argv[] ){
 
 	for(int z = 1; z < length; z++){	
 		
-		if ( id == 0 ){	
-		cout << "sequence: ";
-		for(int c = 0; c < sequence.size(); c++){
-			cout << sequence.at(c) << ", ";	
-		}
-		}
-
 		endVal = sequence.at(sequence.size() - 1);
 		
 		if( !valAppear( unique, endVal, argc, argv ) ){
@@ -50,8 +46,18 @@ int main ( int argc, char *argv[] ){
 			sequence.push_back(searchSeq(sequence, endVal, argc, argv ));	
 		}
 	}		
-	
+			
 	MPI_Finalize ( );
+
+	
+	if ( id == 0 ){	
+
+		cout << endl  << "sequence: ";
+		for(int c = 0; c < sequence.size(); c++){
+			cout << sequence.at(c) << ", ";	
+		}
+	}
+
 	return 0;
 }
 
@@ -73,12 +79,6 @@ int searchFindings ( vector<int> finds ){
 	int closestMatch = 0;
 	bool found = false;
 
-	
-	for( int c = 0; c < finds.size(); c++){
-		cout << "[" <<  finds.at(c) << "]"; 
-	}
-	cout << endl;
-
 	for(int c = 0; c < finds.size() && !found; c++){
 		if ( finds.at(c) > closestMatch ){
 			found = true; 
@@ -91,7 +91,6 @@ int searchFindings ( vector<int> finds ){
 			closestMatch = finds.at(c);
 	}
 	
-	cout << "closest match = " << closestMatch << endl;	
 	
 	return closestMatch;
 }
@@ -122,7 +121,6 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 		//Checking if the task can search within range or is past edge	
 		if( checkIndex >= 0 ){
 			
-			cout << "Proc[" << id << "] checking sequence[" << checkIndex << endl;
 			
 			// We subtract 2 from the index so we don't check the last element in the sequence
 			if ( seq.at(checkIndex) == searchVal )
@@ -141,7 +139,6 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 	
 		MPI_Bcast ( &found, 1, MPI_C_BOOL, 0, MPI_COMM_WORLD );
 
-		cout << "Bcast found = " << found << endl;
 		
 		// Checking if all tasks were used to search, if so then we 
 		//incremebt factor by one so all corses can step forward.
@@ -155,7 +152,6 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 
 	}
 
-	cout << "First search done" << endl;
 	
 	vector<int> findings;
 
@@ -174,7 +170,6 @@ int searchSeq ( vector<int> seq, int val , int argc, char *argv[] ){
 		foundIndex = searchFindings ( findings );
 	}
 	
-	cout << "Bcasting final found index for return" << endl;
 	MPI_Bcast ( &foundIndex, 1, MPI_INT, 0, MPI_COMM_WORLD );	
 
 	

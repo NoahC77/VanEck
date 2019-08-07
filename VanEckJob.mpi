@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#SBATCH -J noah				# Job name
+#SBATCH -o logs/sequence.%j.out	# Name of stdout output file
+#SBATCH -N 5				# Total number of nodes requested
+#SBATCH -n 20				# Total number of mpi tasks requested
+#SBATCH -t 01:30:00			# Run time (hh:mm:ss) - 1.5 hours
+
+#Launch MPI-base executable
+
+declare -i sequenceLength
+sequenceLength=2000
+
+prun ./van_eck $sequenceLength 

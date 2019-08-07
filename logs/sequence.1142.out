@@ -1,0 +1,72 @@
+[prun] Master compute host = cs-comet14
+[prun] Resource manager = slurm
+[prun] Launch cmd = srun --mpi=pmi2 ./van_eck (family=impi)
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+length = 77
+number of arguments = 1
+
+sequence: 0, 0, 1, 0, 2, 0, 2, 2, 1, 6, 0, 5, 0, 2, 6, 5, 4, 0, 5, 3, 0, 3, 2, 9, 0, 4, 9, 3, 6, 14, 0, 6, 3, 5, 15, 0, 5, 3, 5, 2, 17, 0, 6, 11, 0, 3, 8, 0, 3, 3, 1, 42, 0, 5, 15, 20, 0, 4, 32, 0, 3, 11, 18, 0, 4, 7, 0, 3, 7, 3, 2, 31, 0, 6, 31, 3, 6, /var/spool/slurm/d/job01142/slurm_script: line 12: warning: here-document at line 12 delimited by end-of-file (wanted `$(echo 2000)')
+length = 83
+number of arguments = 1
+[proxy:0:2@cs-comet16] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:225): Retrying connection, retry_count=1, retries=0
+[proxy:0:2@cs-comet16] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:240): unable to connect from "cs-comet16" to "localhost" (Connection refused)
+[proxy:0:2@cs-comet16] main (../../../../../src/pm/hydra2/proxy/proxy.c:881): error connecting to singleton port
+[proxy:0:3@cs-comet17] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:225): Retrying connection, retry_count=1, retries=0
+[proxy:0:3@cs-comet17] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:240): unable to connect from "cs-comet17" to "localhost" (Connection refused)
+[proxy:0:3@cs-comet17] main (../../../../../src/pm/hydra2/proxy/proxy.c:881): error connecting to singleton port
+srun: error: cs-comet16: task 0: Exited with exit code 3
+srun: error: cs-comet17: task 0: Exited with exit code 3
+[proxy:0:4@cs-comet18] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:225): Retrying connection, retry_count=1, retries=0
+[proxy:0:1@cs-comet15] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:225): Retrying connection, retry_count=1, retries=0
+[proxy:0:1@cs-comet15] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:240): unable to connect from "cs-comet15" to "localhost" (Connection refused)
+[proxy:0:1@cs-comet15] main (../../../../../src/pm/hydra2/proxy/proxy.c:881): error connecting to singleton port
+srun: error: cs-comet18: task 0: Exited with exit code 3
+srun: error: cs-comet15: task 0: Exited with exit code 3
+[proxy:0:4@cs-comet18] HYD_sock_connect (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:240): unable to connect from "cs-comet18" to "localhost" (Connection refused)
+[proxy:0:4@cs-comet18] main (../../../../../src/pm/hydra2/proxy/proxy.c:881): error connecting to singleton port
+slurmstepd: error: *** JOB 1142 ON cs-comet14 CANCELLED AT 2019-08-06T23:58:04 ***
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)
+[mpiexec@cs-comet14] HYD_sock_write (../../../../../src/pm/hydra2/libhydra/sock/hydra_sock_intel.c:353): write error (Bad file descriptor)

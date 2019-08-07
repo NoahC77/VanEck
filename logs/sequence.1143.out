@@ -1,0 +1,48 @@
+[prun] Master compute host = cs-comet01
+[prun] Resource manager = slurm
+[prun] Launch cmd = srun --mpi=pmi2 ./van_eck (family=impi)
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 1231384169
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 706742272
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 706742272
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 69208064
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+length = 0
+number of arguments = 1
+srun: Job step aborted: Waiting up to 7 seconds for job step to finish.
+srun: got SIGCONT
+slurmstepd: error: *** STEP 1143.0 ON cs-comet01 CANCELLED AT 2019-08-06T23:58:04 ***
+slurmstepd: error: *** JOB 1143 ON cs-comet01 CANCELLED AT 2019-08-06T23:58:04 ***
+srun: error: cs-comet03: tasks 8-11: Terminated

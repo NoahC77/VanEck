@@ -1,0 +1,8 @@
+[prun] Master compute host = cs-comet14
+[prun] Resource manager = slurm
+[prun] Launch cmd = srun --mpi=pmi2 ./van_eck 2000 (family=impi)
+srun: error: cs-comet14: tasks 0-3: Segmentation fault
+srun: error: cs-comet17: tasks 12-15: Segmentation fault
+srun: error: cs-comet16: tasks 8-11: Segmentation fault
+srun: error: cs-comet18: tasks 16-19: Segmentation fault
+srun: error: cs-comet15: tasks 4-7: Segmentation fault
